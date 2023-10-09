@@ -92,7 +92,7 @@ ui <- list(
             boastUtils::citeApp(),
             br(),
             br(),
-            div(class = "updated", "Last Update: 7/11/2023 by LJE.")
+            div(class = "updated", "Last Update: 10/8/2023 by LJE.")
           )
         ),
         #### Set up the Prerequisites Page ----
@@ -165,15 +165,24 @@ ui <- list(
             tabsetPanel(
               #####First tab ----
               tabPanel(
-                title = "Extensive Form",
+                title = "Normal Form ",
                 br(),
-                h3("Game Tree"),
-                br(),
+                h3("Payoff Matrix "),
                 p("Test your understanding by trying out these questions."),
                 fluidRow(
                   uiOutput(outputId = "questionPlot"),
-                  wellPanel(
                   br(),
+                  h4("Answer Choices:"),
+                  p("A:"),
+                  uiOutput("choiceA"),
+                  br(), 
+                  p("B:"),
+                  uiOutput("choiceB"),
+                  br(),
+                  p("C:"),
+                  uiOutput("choiceC"),
+                  br(),
+                  wellPanel(
                   selectInput(
                     inputId = "response",
                     label = "Select your answer", 
@@ -187,10 +196,10 @@ ui <- list(
                     style = "default"
                   ),
                   br(),
-                  br(),
                   p("Feedback"),
                   uiOutput("icon"),
                   uiOutput("answer"),
+                  br(),
                   bsButton(
                     inputId = "newChallenge",
                     label = "New Challenge",
@@ -202,16 +211,25 @@ ui <- list(
               ),
               #####Second tab ----
               tabPanel(
-                title = "Normal Form",
+                title = "Extensive Form",
                 br(),
-                h3("Payoff Matrix"),
+                h3("Game Tree"),
                 br(),
                 p(""),
-                
+                plotOutput("exploreGraph")
               ),
             )
-          )
-          
+          ),
+          div(
+            style = "text-align: center;",
+            bsButton(
+              inputId = "goToExplore",
+              label = "Explore!",
+              size = "large",
+              icon = icon("bolt"),
+              style = "default"
+            )
+          ),
         ),
         #### Set up an Explore Page ----
         tabItem(
@@ -220,17 +238,30 @@ ui <- list(
             tabsetPanel(
               #####First tab ----
               tabPanel(
+                title = "Normal Form",
+                br(),
+                h3("Payoff Matrix"),
+                br(),
+                p("According to the situation, input payoffs in the table below 
+                  for each player to create the payoff matrix.")
+              ),
+              #####Second tab ----
+              tabPanel(
                 title = "Extensive Form",
                 br(),
                 h3("Game Tree"),
                 br(),
-                p("")
+                p("According to the situation, input payoffs in the table below 
+                  for each player to create the game tree.")
               ),
-              #####Second tab ----
+              #####Third tab ----
               tabPanel(
-                title = "Normal Form",
+                title = "Transform",
                 br(),
-                h3("Payoff Matrix"),
+                h3("Payoff Matrix vs Game Tree"),
+                br(),
+                p("Given the situation with the information about the strategies 
+                  of two players in the game tree, input the payoffs in the payoff matrix or verse versa.")
               ),
             )
           ),
@@ -248,38 +279,68 @@ ui <- list(
         #### Set up a Challenge Page ----
         tabItem(
           tabName = "challenge",
-          withMathJax(),
-          h2("Challenge Yourself"),
-          p("The general intent of a Challenge page is to have the user take
-            what they learned in an Exploration and apply that knowledge in new
-            contexts/situations. In essence, to have them challenge their
-            understanding by testing themselves."),
-          p("What this page looks like will be up to you. Something you might
-            consider is to re-create the tools of the Exploration page and then
-            a list of questions for the user to then answer.")
-        ),
-        #### Set up a Simulation Page ----
-        tabItem(
-          tabName = "game",
-          withMathJax(),
-          h2("Practice/Test Yourself with [Type of Game]"),
-          p("On this type of page, you'll set up a game for the user to play.
-            Game types include Tic-Tac-Toe, Matching, and a version Hangman to
-            name a few. If you have ideas for new game type, please let us know.")
+          fluidPage(
+            tabsetPanel(
+              #####First tab ----
+              tabPanel(
+                title = "Two Player Game",
+                br(),
+                p("The following questions will test your knowledge by playing 
+                  a two player games.")
+              ),
+              #####Second tab ----
+              tabPanel(
+                title = "Three Player Game",
+                br(),
+                p("The following questions will test your knowledge by playing 
+                  a three player games.")
+              ),
+              #####Third tab ----
+              tabPanel(
+                title = "Mixed Strategy",
+                br(),
+                p("The following questions will test your knowledge of two player 
+                  games with a mixed strategy..")
+              ),
+            )
+          )
         ),
         #### Set up the References Page ----
         tabItem(
           tabName = "references",
           withMathJax(),
           h2("References"),
-          p(
-            class = "hangingindent",
-            "Bailey, E. (2015). shinyBS: Twitter bootstrap components for shiny.
-            (v0.61). [R package]. Available from
+          p(class = "hangingindent",
+            "Bailey, E. (2022). shinyBS: Twitter bootstrap components for shiny.
+            (v 0.61.1). [R package]. Available from 
             https://CRAN.R-project.org/package=shinyBS"
           ),
-          p("https://www.investopedia.com/terms/m/matching-pennies.asp#:~:text=Matching%20Pennies%20is%20a%20basic%20game%20theory%20example,to%20the%20players%20that%20are%20not%20the%20same."),
-          br(),
+          p(class = "hangingindent",
+            "Carey, R. and Hatfield, N. J. (2022). boastUtils: BOAST Utilities.
+            (v 0.1.12.3). [R package]. Available from
+            https://github.com/EducationShinyAppTeam/boastUtils"
+          ),
+          p(class = "hangingindent",
+            "Chang, W. and Borges Ribeio, B. (2021). shinydashboard: Create
+            dashboards with 'Shiny'. (v. 0.7.2). [R package]. Available from
+            https://CRAN.R-project.org/package=shinydashboard"
+          ),
+          p(class = "hangingindent",
+            "Chang, W., Cheng, J., Allaire, J., Sievert, C., Schloerke, B., Xie, Y.,
+            Allen, J., McPherson, J., Dipert, A., and Borges, B. (2021). shiny: 
+            Web application framework for R, R package. (v 1.7.1). [R package]. 
+            Available from https://CRAN.R-project.org/package=shiny"
+          ),
+          p(class = "hangingindent",
+            "Perrier, V., Meyer, F., and Granjon, D. (2022), shinyWidgets: Custom 
+            Inputs Widgets for Shiny. (v 0.7.0). [R package]. Available from
+            https://CRAN.R-project.org/package=shinyWidgets"
+          ),
+          p(class = "hangingindent",
+            "Wickham, W. (2016), ggplot2: Elegant graphics for data analysis,
+            R Package. Springer-Verlag New York. (v 3.3.6). [R package].
+            Available from https://ggplot2.tidyverse.org"
+          ),
           br(),
           br(),
           boastUtils::copyrightInfo()
@@ -305,7 +366,7 @@ server <- function(input, output, session) {
     }
   )
   
-  ## Move to Exam page ----
+  ## Move to Example page ----
   observeEvent(
     eventExpr = input$goToExam,
     handlerExpr = {
@@ -317,11 +378,35 @@ server <- function(input, output, session) {
     }
   )
   
+  ## Move to Explore page ----
+  observeEvent(
+    eventExpr = input$goToExplore,
+    handlerExpr = {
+      updateTabItems(
+        session = session,
+        inputId = "pages",
+        selected = "explore"
+      )
+    }
+  )
+  
+  ## Move to Challenge page ----
+  observeEvent(
+    eventExpr = input$goToChallenge,
+    handlerExpr = {
+      updateTabItems(
+        session = session,
+        inputId = "pages",
+        selected = "challenge"
+      )
+    }
+  )
+  
   ## Examples Page Buttons ----
   ### Payoff Matrix ----
   challengeElements <- reactiveValues(
     # Creates a vector of shuffled integers which we can use for the id column
-    promptIds = sample(1:nrow(questionBank), size = nrow(questionBank), replace = FALSE),
+    promptIds = sample(1:nrow(questionBank1), size = nrow(questionBank1), replace = FALSE),
     # Create current index
     currentIndex = 1,
     # Create a flag if current question has been answered
@@ -349,14 +434,11 @@ server <- function(input, output, session) {
     }
   )
   
-  ### Display challenge plot and question ----
-  scoreLevel <- reactiveVal(0)
-  
+  ### Display challenge plot and question
   output$questionPlot <- renderUI(
     expr = {
       questionId <- challengeElements$promptIds[challengeElements$currentIndex]
       tagList(
-        h3("Question Plot"),
         HTML(questionBank1$extraOutput[questionId]),
         p(questionBank1$question[questionId])
       )
@@ -397,8 +479,6 @@ server <- function(input, output, session) {
       )
     })
   })
-  
-  
   
   current_question <- reactiveVal()
   
@@ -447,16 +527,22 @@ server <- function(input, output, session) {
     handlerExpr = {
       user_answer <- input$response
       correct_answer <- current_question()$answer
+      
+      if (user_answer == correct_answer) {
+        output$icon <- renderIcon("correct", width = 40)
+      } else {
+        output$icon <- renderIcon("incorrect", width = 40)
+      }
+      
     }
   )
   
-  ### Get new challenge and reset feedback ----
+  ### Get new challenge and reset feedback
   observeEvent(
     eventExpr = input$newChallenge,
     handlerExpr = {
       random_choice()
       random_question()
-      scoreLevel()
       
       updateSelectInput(
         session = session,
@@ -469,6 +555,77 @@ server <- function(input, output, session) {
       
     }
   )
+  
+  ### Game Tree ----
+  exploreDF <- reactive({
+    # Adjusts the vertex labels for the leaf nodes if weights are being shown
+    probs <- c(
+      edgeLabels()[1] * edgeLabels()[3],
+      edgeLabels()[1] * edgeLabels()[4],
+      edgeLabels()[2] * edgeLabels()[5],
+      edgeLabels()[2] * edgeLabels()[6]
+    )
+    probs <- format(
+      x = round(x = probs, digits = 4),
+      scientific = F
+    )
+    edgeLabelsNice <- format(
+      x = round(x = edgeLabels(),  digits = 2),
+      scientific = F
+    )
+    # Paste probabilities at bottom of tree
+    for(i in 3:6){
+      to[i] <- paste("\n", to[i], "\n", probs[i-2])
+    }
+    # Make actual data frame
+    data.frame(from = from, to = to, weight = edgeLabelsNice)
+  })
+  
+  output$exploreGraph <- renderPlot({
+    df <- exploreDF()
+    # Add labels
+    labels <- c("a", "b", "c",
+                "d", "c", "d")
+    # Adjust spacing (making it consistent with challenge side where this is
+    # necessary to give labels more room)
+    for (edge in 1:6) {
+      if (edge %% 2 == 1) {
+        df$weight[edge] <- paste(
+          "\n",
+          labels[edge],
+          "      \n",
+          df$weight[edge],
+          "      "
+        ) # Move right labels further right
+      } else {
+        df$weight[edge] <- paste(
+          "\n      ",
+          labels[edge],
+          "\n      ",
+          df$weight[edge]
+        ) # Move left labels further left
+      }
+    }
+    
+    # Make actual plot (the plot command is overridden by igraph)
+    par(mar = c(0.5, 0, 0.5, 0))
+    plot(
+      igraph::graph_from_data_frame(df, directed = F),
+      label = TRUE,
+      edge.label = df$weight,
+      edge.color = "#000000",
+      edge.width = 1.5,
+      vertex.label.color = "#000000",
+      edge.label.color = "#000000",
+      label.cex = 1.2,
+      edge.label.cex = 1.2,
+      vertex.color = rep(x = "#E69F0080", times = 6), # Assigns the correct color to all 6 nodes
+      layout = igraph::layout_as_tree(
+        igraph::graph_from_data_frame(df),
+        root = 1
+      )
+    )
+  })
 
 }
 

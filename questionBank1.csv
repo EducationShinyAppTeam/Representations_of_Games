@@ -1,0 +1,11 @@
+﻿id,question,extraOutput,A,B,C,answer,format,label
+1,What is the best strategy for Player 1 if Player 2 chooses to play c? ,<img src='payoff1.jpg' alt'This is payoff matrix of two players with each has two strategies.'>,Play a.,Play b.,There is no best strategy.,B,three,Choices
+2,What is the best strategy for Player 2 if Player 1 chooses to play a?,<img src='payoff1.jpg' alt'This is payoff matrix of two players with each has two strategies.'>,Play c.,Play d.,There is no best strategy.,A,three,Choices
+3,What is the best strategy for Player 1 if Player 2 chooses to play d?,<img src='payoff2.jpg' alt'This is payoff matrix of two players with each has two strategies.'>,Play a.,Play b.,There is no best strategy.,B,three,Choices
+4,What is the best strategy for Player 2 if Player 1 chooses to play b?,<img src='payoff2.jpg' alt'This is payoff matrix of two players with each has two strategies.'>,Play c.,Play d.,There is no best strategy.,B,three,Choices
+5,What is the best strategy for Player 1 if Player 2 chooses to play d?,<img src='payoff3.jpg' alt'This is payoff matrix of two players with each has two strategies.'>,Play a.,Play b.,There is no best strategy.,A,three,Choices
+6,What is the best strategy for Player 2 if Player 1 chooses to play b?,<img src='payoff3.jpg' alt'This is payoff matrix of two players with each has two strategies.'>,Play c.,Play d.,There is no best strategy.,C,three,Choices
+7,What is the best strategy for Player 1 if Player 2 chooses to play d?,<img src='payoff4.jpg' alt'This is payoff matrix of two players with each has two strategies.'>,Play a.,Play b.,There is no best strategy.,B,three,Choices
+8,What is the best strategy for Player 2 if Player 1 chooses to play d?,<img src='payoff4.jpg' alt'This is payoff matrix of two players with each has two strategies.'>,Play c.,Play d.,There is no best strategy.,B,three,Choices
+9,Where is the nash equilibrium?,<img src='payoff5.jpg' alt'This is payoff matrix of two players with each has two strategies.'>,Both Players play a.,Player 1 plays a and Players 2 plays b.,Player 1 plays b and Players 2 plays a.,C,three,Choices
+10,Where is the nash equilibrium?,<img src='payoff6.jpg' alt'This is payoff matrix of two players with each has two strategies.'>,Both Players play b.,Player 1 plays a and Players 2 plays b.,Player 1 plays b and Players 2 plays a.,B,three,Choices
