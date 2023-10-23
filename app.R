@@ -110,7 +110,7 @@ ui <- list(
           br(),
           p("Assumptions of payoff matrix:"),
           tags$ul(
-            tags$li("The players will play their strategies simultaneously."),
+            tags$li("The players will play their strategies simultaneously in Normal form."),
             tags$li("This is one-shot game, meaning all players paly only once.")
           ),
           box(
@@ -121,19 +121,39 @@ ui <- list(
             width = '100%',
             "We will use game tree in extensive form.",
             tags$figure(
-              class = "centerFigure",
+              class = "leftFigure",
               tags$img(
-                scr = "www/prere1.jpg",
+                src = "prere1.jpg",
+                width = 400,
                 alt = "Example of extensive form in game tree."
                 )
               ),
             br(),
             "There are three sets of objects in extensive form:",
             tags$ol(
-              tags$li("Nodes"),
-              tags$li("Branches"),
-              tags$li("Information sets")
-              )
+              tags$li("Nodes - Players will be located"),
+              tags$li("Branches - Strategies of each Players"),
+              tags$li("Information sets - information that a Player knows about 
+                      what his/her opponent will do")
+              ),
+            br(), 
+            "From the above example, the initial node is started by Player A to 
+            make a decision whether to play or not play a game. Next, Player B at 
+            the second and third nodes will observe Player A's decision and then 
+            decide to either play or not play a game.", 
+            br(),
+            "The values represent the utilities of each decision. For example, if:",
+            tags$ol(
+              tags$li("Player A chooses to play the game and Player B chooses 
+                      to play, A will get a utility of 5."),
+              tags$li("Player A chooses to play the game and Player B chooses 
+                      to not play, he will get a utility of 10."),
+              tags$li("Player A chooses to not play the game and Player B chooses 
+                      to play, A will get a utility of 9."),
+              tags$li("Player A chooses to not play the game and Player B chooses 
+                      to not play, he will get a utility of 14.")
+            ),
+            "This is the same situation with Player B."
             ),
           box(
             title = strong("Normal Form"),
@@ -143,19 +163,39 @@ ui <- list(
             width = '100%',
             "We will use payoff matrix in normal form.",
             tags$figure(
-              class = "centerFigure",
+              class = "leftFigure",
               tags$img(
-                scr = "www/prere2.jpg",
+                src = "prere2.jpg",
+                width = 400,
                 alt = "Example of normal form in payoff matrix."
                 )
               ),
             br(),
             "There are three sets of objects in normal form:",
             tags$ol(
-              tags$li("Players"),
-              tags$li("Strategies"),
+              tags$li("Players - Player A and Player B"),
+              tags$li("Strategies - Play or not play"),
               tags$li("Payoffs")
-              )
+              ),
+            "From the above example, we have the same set up as in the Extensive form. 
+            However, this time the players will play the game simultaneously. In this case, 
+            the best strategy for Player A is to chooses not play no matter what 
+            Palyer B plays, because by comparing the payoffs:",
+            tags$ol(
+              tags$li("If B chooses to play, then A's utility function of not play 
+                      (9) is high than play (5)."),
+              tags$li("If B chooses to not play, then A's utility function of not 
+                      play (14) is high than play (10).")
+            ),
+            "For Player B, there is no best strategy, because:",
+            tags$ol(
+              tags$li("If A chooses to play, then B's utility function of not play 
+                      (6) is high than play (3)."),
+              tags$li("If A chooses to not play, then B's utility function of 
+                      play (11) is high than not play (7).")
+            ),
+            "Neither of the strategies of Player B is consistently better than the 
+            other."
             )
           ),
         #### Set up the Examples Page ----
@@ -168,8 +208,9 @@ ui <- list(
                 title = "Normal Form ",
                 br(),
                 h3("Payoff Matrix "),
-                p("Test your understanding by trying out these questions."),
                 fluidRow(
+                  column(
+                    width = 6,
                   uiOutput(outputId = "questionPlot"),
                   br(),
                   h4("Answer Choices:"),
@@ -181,7 +222,11 @@ ui <- list(
                   br(),
                   p("C:"),
                   uiOutput("choiceC"),
-                  br(),
+                  br()
+                  ),
+                  column(
+                    width = 6,
+                    p("Test your understanding by trying out these questions."),
                   wellPanel(
                   selectInput(
                     inputId = "response",
@@ -201,10 +246,11 @@ ui <- list(
                   uiOutput("answer"),
                   br(),
                   bsButton(
-                    inputId = "newChallenge",
+                    inputId = "newChallenge1",
                     label = "New Challenge",
                     size = "large",
                     style = "default"
+                  )
                   )
                   )
                 )
@@ -417,17 +463,12 @@ server <- function(input, output, session) {
   
   ### Set watcher to iterate current question
   observeEvent(
-    eventExpr = c(input$pages, input$newChallenge),
+    eventExpr = c(input$pages, input$newChallenge1),
     handlerExpr = {
-      if (input$pages == "challenge" & challengeElements$firstTime) {
+      if (input$pages == "example" & challengeElements$firstTime) {
         challengeElements$firstTime <- FALSE
       } else if (challengeElements$currentIndex == nrow(questionBank1)) {
-        sendSweetAlert(
-          session = session,
-          type = "error",
-          title = "End of Game",
-          text = "You've played through all of the questions."
-        )
+        
       } else {
         challengeElements$currentIndex <- challengeElements$currentIndex + 1
       }
@@ -539,7 +580,7 @@ server <- function(input, output, session) {
   
   ### Get new challenge and reset feedback
   observeEvent(
-    eventExpr = input$newChallenge,
+    eventExpr = input$newChallenge1,
     handlerExpr = {
       random_choice()
       random_question()
