@@ -8,6 +8,10 @@ library(boastUtils)
 # Define global constants and load question banks ----
 questionBank1 <- read.csv("questionBank1.csv", header = TRUE)
 questionBank1 <- na.omit(questionBank1)
+questionBank2 <- read.csv("questionBank2.csv", header = TRUE)
+questionBank2 <- na.omit(questionBank2)
+questionBank3 <- read.csv("questionBank3.csv", header = TRUE)
+questionBank3 <- na.omit(questionBank3)
 
 # Define UI for App ----
 ui <- list(
@@ -37,7 +41,6 @@ ui <- list(
         id = "pages",
         menuItem("Overview", tabName = "overview", icon = icon("gauge-high")),
         menuItem("Prerequisites", tabName = "prerequisites", icon = icon("book")),
-        menuItem("Examples", tabName = "examples", icon = icon("book-open-reader")),
         menuItem("Explore", tabName = "explore", icon = icon("wpexplorer")),
         menuItem("Challenge", tabName = "challenge", icon = icon("gears")),
         menuItem("References", tabName = "references", icon = icon("leanpub"))
@@ -62,17 +65,15 @@ ui <- list(
           h2("Instructions"),
           tags$ol(
             tags$li("Review key topics of components and consumption of a game."),
-            tags$li("Explore the differences of games ins extensive form and normal 
-                    form."),
-            tags$li("Challenge yourself by play the game as one of the players to 
-                    select the best strategy for you."),
-            tags$li("Play the game to test how far you've come.")
+            tags$li("Explore the differences of games in extensive form and normal 
+                    form"),
+            tags$li("Challenge yourself by play the game using the mixed strategy method."),
           ),
           br(),
           div(
             style = "text-align: center;",
             bsButton(
-              inputId = "goToExam",
+              inputId = "goToExplore",
               label = "GO!",
               size = "large",
               icon = icon("bolt"),
@@ -92,7 +93,7 @@ ui <- list(
             boastUtils::citeApp(),
             br(),
             br(),
-            div(class = "updated", "Last Update: 10/8/2023 by LJE.")
+            div(class = "updated", "Last Update: 1/20/2024 by LJE.")
           )
         ),
         #### Set up the Prerequisites Page ----
@@ -117,7 +118,7 @@ ui <- list(
             title = strong("Extensive Form"),
             status = "primary",
             collapsible = TRUE,
-            collapsed = FALSE,
+            collapsed = TRUE,
             width = '100%',
             "We will use game tree in extensive form.",
             tags$figure(
@@ -159,7 +160,7 @@ ui <- list(
             title = strong("Normal Form"),
             status = "primary",
             collapsible = TRUE,
-            collapsed = FALSE,
+            collapsed = TRUE,
             width = '100%',
             "We will use payoff matrix in normal form.",
             tags$figure(
@@ -198,9 +199,9 @@ ui <- list(
             other."
             )
           ),
-        #### Set up the Examples Page ----
+        #### Set up an Explore Page ----
         tabItem(
-          tabName = "examples",
+          tabName = "explore",
           fluidPage(
             tabsetPanel(
               #####First tab ----
@@ -211,47 +212,47 @@ ui <- list(
                 fluidRow(
                   column(
                     width = 6,
-                  uiOutput(outputId = "questionPlot"),
-                  br(),
-                  h4("Answer Choices:"),
-                  p("A:"),
-                  uiOutput("choiceA"),
-                  br(), 
-                  p("B:"),
-                  uiOutput("choiceB"),
-                  br(),
-                  p("C:"),
-                  uiOutput("choiceC"),
-                  br()
+                    uiOutput(outputId = "questionPlot1"),
+                    br(),
+                    h4("Answer Choices:"),
+                    p("A:"),
+                    uiOutput("choiceA"),
+                    br(), 
+                    p("B:"),
+                    uiOutput("choiceB"),
+                    br(),
+                    p("C:"),
+                    uiOutput("choiceC"),
+                    br()
                   ),
                   column(
                     width = 6,
                     p("Test your understanding by trying out these questions."),
-                  wellPanel(
-                  selectInput(
-                    inputId = "response",
-                    label = "Select your answer", 
-                    choices = list("A", "B", "C", ""), 
-                    selected = ""
-                  ),
-                  bsButton(
-                    inputId = "submit",
-                    label = "Submit",
-                    size = "large",
-                    style = "default"
-                  ),
-                  br(),
-                  p("Feedback"),
-                  uiOutput("icon"),
-                  uiOutput("answer"),
-                  br(),
-                  bsButton(
-                    inputId = "newChallenge1",
-                    label = "New Challenge",
-                    size = "large",
-                    style = "default"
-                  )
-                  )
+                    wellPanel(
+                      selectInput(
+                        inputId = "response1",
+                        label = "Select your answer", 
+                        choices = list("A", "B", "C", ""), 
+                        selected = ""
+                      ),
+                      bsButton(
+                        inputId = "submit1",
+                        label = "Submit",
+                        size = "large",
+                        style = "default"
+                      ),
+                      br(),
+                      p("Feedback"),
+                      uiOutput("icon1"),
+                      uiOutput("answer1"),
+                      br(),
+                      bsButton(
+                        inputId = "newChallenge1",
+                        label = "New Challenge",
+                        size = "large",
+                        style = "default"
+                      )
+                    )
                   )
                 )
               ),
@@ -261,53 +262,54 @@ ui <- list(
                 br(),
                 h3("Game Tree"),
                 br(),
-                p(""),
-                plotOutput("exploreGraph")
-              ),
-            )
-          ),
-          div(
-            style = "text-align: center;",
-            bsButton(
-              inputId = "goToExplore",
-              label = "Explore!",
-              size = "large",
-              icon = icon("bolt"),
-              style = "default"
-            )
-          ),
-        ),
-        #### Set up an Explore Page ----
-        tabItem(
-          tabName = "explore",
-          fluidPage(
-            tabsetPanel(
-              #####First tab ----
-              tabPanel(
-                title = "Normal Form",
-                br(),
-                h3("Payoff Matrix"),
-                br(),
                 p("According to the situation, input payoffs in the table below 
-                  for each player to create the payoff matrix.")
-              ),
-              #####Second tab ----
-              tabPanel(
-                title = "Extensive Form",
-                br(),
-                h3("Game Tree"),
-                br(),
-                p("According to the situation, input payoffs in the table below 
-                  for each player to create the game tree.")
-              ),
-              #####Third tab ----
-              tabPanel(
-                title = "Transform",
-                br(),
-                h3("Payoff Matrix vs Game Tree"),
-                br(),
-                p("Given the situation with the information about the strategies 
-                  of two players in the game tree, input the payoffs in the payoff matrix or verse versa.")
+                  for each player to create the game tree."),
+                fluidRow(
+                  column(
+                    width = 6,
+                    uiOutput(outputId = "questionPlot2"),
+                    br(),
+                    h4("Answer Choices:"),
+                    p("A:"),
+                    uiOutput("choiceA"),
+                    br(), 
+                    p("B:"),
+                    uiOutput("choiceB"),
+                    br(),
+                    p("C:"),
+                    uiOutput("choiceC"),
+                    br()
+                  ),
+                  column(
+                    width = 6,
+                    p("Test your understanding by trying out these questions."),
+                    wellPanel(
+                      selectInput(
+                        inputId = "response2",
+                        label = "Select your answer", 
+                        choices = list("A", "B", "C", ""), 
+                        selected = ""
+                      ),
+                      bsButton(
+                        inputId = "submit2",
+                        label = "Submit",
+                        size = "large",
+                        style = "default"
+                      ),
+                      br(),
+                      p("Feedback"),
+                      uiOutput("icon2"),
+                      uiOutput("answer2"),
+                      br(),
+                      bsButton(
+                        inputId = "newChallenge2",
+                        label = "New Challenge",
+                        size = "large",
+                        style = "default"
+                      )
+                    )
+                  )
+                )
               ),
             )
           ),
@@ -327,26 +329,58 @@ ui <- list(
           tabName = "challenge",
           fluidPage(
             tabsetPanel(
-              #####First tab ----
-              tabPanel(
-                title = "Two Player Game",
-                br(),
-                p("The following questions will test your knowledge by playing 
-                  a two player games.")
-              ),
               #####Second tab ----
-              tabPanel(
-                title = "Three Player Game",
-                br(),
-                p("The following questions will test your knowledge by playing 
-                  a three player games.")
-              ),
-              #####Third tab ----
               tabPanel(
                 title = "Mixed Strategy",
                 br(),
                 p("The following questions will test your knowledge of two player 
-                  games with a mixed strategy..")
+                  games with a mixed strategy.."),
+                fluidRow(
+                  column(
+                    width = 6,
+                    uiOutput(outputId = "questionPlot4"),
+                    br(),
+                    h4("Answer Choices:"),
+                    p("A:"),
+                    uiOutput("choiceA"),
+                    br(), 
+                    p("B:"),
+                    uiOutput("choiceB"),
+                    br(),
+                    p("C:"),
+                    uiOutput("choiceC"),
+                    br()
+                  ),
+                  column(
+                    width = 6,
+                    p("Test your understanding by trying out these questions."),
+                    wellPanel(
+                      selectInput(
+                        inputId = "response4",
+                        label = "Select your answer", 
+                        choices = list("A", "B", "C", ""), 
+                        selected = ""
+                      ),
+                      bsButton(
+                        inputId = "submit4",
+                        label = "Submit",
+                        size = "large",
+                        style = "default"
+                      ),
+                      br(),
+                      p("Feedback"),
+                      uiOutput("icon4"),
+                      uiOutput("answer4"),
+                      br(),
+                      bsButton(
+                        inputId = "newChallenge4",
+                        label = "New Challenge",
+                        size = "large",
+                        style = "default"
+                      )
+                    )
+                  )
+                )
               ),
             )
           )
@@ -378,15 +412,18 @@ ui <- list(
             Available from https://CRAN.R-project.org/package=shiny"
           ),
           p(class = "hangingindent",
+            "Polak, B. (2007), midterm exam solutions - Yale University. Open Yale Courses.
+            Available from https://oyc.yale.edu/sites/default/files/midterm-exam-solutions-pdf.pdf"
+          ),
+          p(class = "hangingindent",
+            "Ishii, Y. (n.d.), Introductory Lecture. Canvas.
+            Available from https://psu.instructure.com/courses/2212963/files/folder/Lectures"
+          ),
+          p(class = "hangingindent",
             "Perrier, V., Meyer, F., and Granjon, D. (2022), shinyWidgets: Custom 
             Inputs Widgets for Shiny. (v 0.7.0). [R package]. Available from
             https://CRAN.R-project.org/package=shinyWidgets"
-          ),
-          p(class = "hangingindent",
-            "Wickham, W. (2016), ggplot2: Elegant graphics for data analysis,
-            R Package. Springer-Verlag New York. (v 3.3.6). [R package].
-            Available from https://ggplot2.tidyverse.org"
-          ),
+          ),  
           br(),
           br(),
           boastUtils::copyrightInfo()
@@ -407,19 +444,8 @@ server <- function(input, output, session) {
         session = session,
         type = "info",
         title = "Information",
-        text = "This App Template will help you get started building your own app"
-      )
-    }
-  )
-  
-  ## Move to Example page ----
-  observeEvent(
-    eventExpr = input$goToExam,
-    handlerExpr = {
-      updateTabItems(
-        session = session,
-        inputId = "pages",
-        selected = "examples"
+        text = "This App will help you to pracite the knowledge of game theory by using the 
+        Normal form and Extensive form of game."
       )
     }
   )
@@ -448,131 +474,131 @@ server <- function(input, output, session) {
     }
   )
   
-  ## Examples Page Buttons ----
+  ## Explore Page Buttons ----
   ### Payoff Matrix ----
-  challengeElements <- reactiveValues(
+  challengeElements1 <- reactiveValues(
     # Creates a vector of shuffled integers which we can use for the id column
-    promptIds = sample(1:nrow(questionBank1), size = nrow(questionBank1), replace = FALSE),
+    promptIds1 = sample(1:nrow(questionBank1), size = nrow(questionBank1), replace = FALSE),
     # Create current index
-    currentIndex = 1,
+    currentIndex1 = 1,
     # Create a flag if current question has been answered
-    answered = FALSE,
+    answered1 = FALSE,
     # Create a flag for first visit to page
-    firstTime = TRUE
+    firstTime1 = TRUE
   )
   
   ### Set watcher to iterate current question
   observeEvent(
     eventExpr = c(input$pages, input$newChallenge1),
     handlerExpr = {
-      if (input$pages == "example" & challengeElements$firstTime) {
-        challengeElements$firstTime <- FALSE
-      } else if (challengeElements$currentIndex == nrow(questionBank1)) {
+      if (input$pages == "explore" & challengeElements1$firstTime1) {
+        challengeElements1$firstTime1 <- FALSE
+      } else if (challengeElements1$currentIndex1 == nrow(questionBank1)) {
         
       } else {
-        challengeElements$currentIndex <- challengeElements$currentIndex + 1
+        challengeElements1$currentIndex1 <- challengeElements1$currentIndex1 + 1
       }
     }
   )
   
   ### Display challenge plot and question
-  output$questionPlot <- renderUI(
+  output$questionPlot1 <- renderUI(
     expr = {
-      questionId <- challengeElements$promptIds[challengeElements$currentIndex]
+      questionId1 <- challengeElements1$promptIds1[challengeElements1$currentIndex1]
       tagList(
-        HTML(questionBank1$extraOutput[questionId]),
-        p(questionBank1$question[questionId])
+        HTML(questionBank1$extraOutput1[questionId1]),
+        p(questionBank1$question1[questionId1])
       )
     }
   )
   
-  random_order <- reactiveVal()
+  random_order1 <- reactiveVal()
   
-  random_choice <- function() {
+  random_choice1 <- function() {
     choices <- c("1", "2", "3")
-    random_order <- sample(choices)
-    return(random_order)
+    random_order1 <- sample(choices)
+    return(random_order1)
   }
   
-  random_choice()
+  random_choice1()
   
   observe({
-    random_order_val <- random_order()
+    random_order_val1 <- random_order1()
     
     output$choiceA <- renderUI({
-      questionId <- challengeElements$promptIds[challengeElements$currentIndex]
+      questionId1 <- challengeElements1$promptIds1[challengeElements1$currentIndex1]
       tagList(
-        HTML(questionBank1[[paste0("A")]][questionId])
+        HTML(questionBank1[[paste0("A")]][questionId1])
       )
     })
     
     output$choiceB <- renderUI({
-      questionId <- challengeElements$promptIds[challengeElements$currentIndex]
+      questionId1 <- challengeElements1$promptIds1[challengeElements1$currentIndex1]
       tagList(
-        HTML(questionBank1[[paste0("B")]][questionId])
+        HTML(questionBank1[[paste0("B")]][questionId1])
       )
     })
     
     output$choiceC <- renderUI({
-      questionId <- challengeElements$promptIds[challengeElements$currentIndex]
+      questionId1 <- challengeElements1$promptIds1[challengeElements1$currentIndex1]
       tagList(
-        HTML(questionBank1[[paste0("C")]][questionId])
+        HTML(questionBank1[[paste0("C")]][questionId1])
       )
     })
   })
   
-  current_question <- reactiveVal()
+  current_question1 <- reactiveVal()
   
-  random_question <- function() {
-    random_index <- sample(nrow(questionBank1), 1)
-    current_question(questionBank1[random_index, ])
+  random_question1 <- function() {
+    random_index1 <- sample(nrow(questionBank1), 1)
+    current_question1(questionBank1[random_index1, ])
   }
   
-  random_question()
+  random_question1()
   
-  output$question <- renderText({
-    current_question()$question
+  output$question1 <- renderText({
+    current_question1()$question1
   })
   
-  output$extraOutput <- renderImage({
-    if (!is.null(current_question()$extraOutput) && nchar(current_question()$extraOutput) > 0) 
+  output$extraOutput1 <- renderImage({
+    if (!is.null(current_question1()$extraOutput1) && nchar(current_question1()$extraOutput1) > 0) 
     {
-      return(list(src = current_question()$extraOutput))
+      return(list(src = current_question1()$extraOutput1))
     }
   },
   deleteFile = FALSE)
   
   output$A <- renderText({
-    if (!is.null(current_question()$A) && nchar(current_question()$A) > 0) 
+    if (!is.null(current_question1()$A) && nchar(current_question1()$A) > 0) 
     {
-      return(list(src = current_question()$A))
+      return(list(src = current_question1()$A))
     }
   })
   
   output$B <- renderText({
-    if (!is.null(current_question()$B) && nchar(current_question()$B) > 0) 
+    if (!is.null(current_question1()$B) && nchar(current_question1()$B) > 0) 
     {
-      return(list(src = current_question()$B))
+      return(list(src = current_question1()$B))
     }
   })
   
   output$C <- renderText({
-    if (!is.null(current_question()$C) && nchar(current_question()$C) > 0) 
+    if (!is.null(current_question1()$C) && nchar(current_question1()$C) > 0) 
     {
-      return(list(src = current_question()$C))
+      return(list(src = current_question1()$C))
     }
   })
   
   observeEvent(
-    eventExpr = input$submit, 
+    eventExpr = input$submit1, 
     handlerExpr = {
-      user_answer <- input$response
-      correct_answer <- current_question()$answer
+      user_answer1 <- input$response1
+      correct_answer1 <- current_question()$answer1
       
-      if (user_answer == correct_answer) {
-        output$icon <- renderIcon("correct", width = 40)
+      if (user_answer1 == correct_answer1) {
+        output$icon1 <- renderIcon("correct", width = 40)
       } else {
-        output$icon <- renderIcon("incorrect", width = 40)
+        output$icon1 <- renderIcon("incorrect", width = 40)
       }
       
     }
@@ -582,91 +608,317 @@ server <- function(input, output, session) {
   observeEvent(
     eventExpr = input$newChallenge1,
     handlerExpr = {
-      random_choice()
-      random_question()
+      random_choice1()
+      random_question1()
       
       updateSelectInput(
         session = session,
-        inputId = "answer",
+        inputId = "answer1",
         selected = ""
       )
       
-      output$icon <- renderIcon()
-      output$response <- renderUI(NULL)
+      output$icon1 <- renderIcon()
+      output$response1 <- renderUI(NULL)
       
     }
   )
   
   ### Game Tree ----
-  exploreDF <- reactive({
-    # Adjusts the vertex labels for the leaf nodes if weights are being shown
-    probs <- c(
-      edgeLabels()[1] * edgeLabels()[3],
-      edgeLabels()[1] * edgeLabels()[4],
-      edgeLabels()[2] * edgeLabels()[5],
-      edgeLabels()[2] * edgeLabels()[6]
-    )
-    probs <- format(
-      x = round(x = probs, digits = 4),
-      scientific = F
-    )
-    edgeLabelsNice <- format(
-      x = round(x = edgeLabels(),  digits = 2),
-      scientific = F
-    )
-    # Paste probabilities at bottom of tree
-    for(i in 3:6){
-      to[i] <- paste("\n", to[i], "\n", probs[i-2])
-    }
-    # Make actual data frame
-    data.frame(from = from, to = to, weight = edgeLabelsNice)
-  })
+  challengeElements2 <- reactiveValues(
+    # Creates a vector of shuffled integers which we can use for the id column
+    promptIds2 = sample(1:nrow(questionBank2), size = nrow(questionBank2), replace = FALSE),
+    # Create current index
+    currentIndex2 = 1,
+    # Create a flag if current question has been answered
+    answered2 = FALSE,
+    # Create a flag for first visit to page
+    firstTime2 = TRUE
+  )
   
-  output$exploreGraph <- renderPlot({
-    df <- exploreDF()
-    # Add labels
-    labels <- c("a", "b", "c",
-                "d", "c", "d")
-    # Adjust spacing (making it consistent with challenge side where this is
-    # necessary to give labels more room)
-    for (edge in 1:6) {
-      if (edge %% 2 == 1) {
-        df$weight[edge] <- paste(
-          "\n",
-          labels[edge],
-          "      \n",
-          df$weight[edge],
-          "      "
-        ) # Move right labels further right
+  ### Set watcher to iterate current question
+  observeEvent(
+    eventExpr = c(input$pages, input$newChallenge2),
+    handlerExpr = {
+      if (input$pages == "explore" & challengeElements2$firstTime2) {
+        challengeElements2$firstTime2 <- FALSE
+      } else if (challengeElements2$currentIndex2 == nrow(questionBank2)) {
+        
       } else {
-        df$weight[edge] <- paste(
-          "\n      ",
-          labels[edge],
-          "\n      ",
-          df$weight[edge]
-        ) # Move left labels further left
+        challengeElements2$currentIndex2 <- challengeElements2$currentIndex2 + 1
       }
     }
-    
-    # Make actual plot (the plot command is overridden by igraph)
-    par(mar = c(0.5, 0, 0.5, 0))
-    plot(
-      igraph::graph_from_data_frame(df, directed = F),
-      label = TRUE,
-      edge.label = df$weight,
-      edge.color = "#000000",
-      edge.width = 1.5,
-      vertex.label.color = "#000000",
-      edge.label.color = "#000000",
-      label.cex = 1.2,
-      edge.label.cex = 1.2,
-      vertex.color = rep(x = "#E69F0080", times = 6), # Assigns the correct color to all 6 nodes
-      layout = igraph::layout_as_tree(
-        igraph::graph_from_data_frame(df),
-        root = 1
+  )
+  
+  ### Display challenge plot and question
+  output$questionPlot2 <- renderUI(
+    expr = {
+      questionId2 <- challengeElements2$promptIds2[challengeElements2$currentIndex2]
+      tagList(
+        HTML(questionBank2$extraOutput2[questionId2]),
+        p(questionBank2$question2[questionId2])
       )
-    )
+    }
+  )
+  
+  random_order2 <- reactiveVal()
+  
+  random_choice2 <- function() {
+    choices <- c("1", "2", "3")
+    random_order2 <- sample(choices)
+    return(random_order2)
+  }
+  
+  random_choice2()
+  
+  observe({
+    random_order_val2 <- random_order2()
+    
+    output$choiceA <- renderUI({
+      questionId2 <- challengeElements2$promptIds2[challengeElements2$currentIndex2]
+      tagList(
+        HTML(questionBank2[[paste0("A")]][questionId2])
+      )
+    })
+    
+    output$choiceB <- renderUI({
+      questionId2 <- challengeElements2$promptIds[challengeElements2$currentIndex2]
+      tagList(
+        HTML(questionBank2[[paste0("B")]][questionId2])
+      )
+    })
+    
+    output$choiceC <- renderUI({
+      questionId2 <- challengeElements2$promptIds[challengeElements2$currentIndex2]
+      tagList(
+        HTML(questionBank2[[paste0("C")]][questionId2])
+      )
+    })
   })
+  
+  current_question2 <- reactiveVal()
+  
+  random_question2 <- function() {
+    random_index2 <- sample(nrow(questionBank2), 1)
+    current_question2(questionBank2[random_index2, ])
+  }
+  
+  random_question2()
+  
+  output$question2 <- renderText({
+    current_question2()$question2
+  })
+  
+  output$extraOutput2 <- renderImage({
+    if (!is.null(current_question2()$extraOutput2) && nchar(current_question2()$extraOutput2) > 0) 
+    {
+      return(list(src = current_question2()$extraOutput2))
+    }
+  },
+  deleteFile = FALSE)
+  
+  output$A <- renderText({
+    if (!is.null(current_question2()$A) && nchar(current_question2()$A) > 0) 
+    {
+      return(list(src = current_question2()$A))
+    }
+  })
+  
+  output$B <- renderText({
+    if (!is.null(current_question2()$B) && nchar(current_question2()$B) > 0) 
+    {
+      return(list(src = current_question2()$B))
+    }
+  })
+  
+  output$C <- renderText({
+    if (!is.null(current_question2()$C) && nchar(current_question2()$C) > 0) 
+    {
+      return(list(src = current_question2()$C))
+    }
+  })
+  
+  observeEvent(
+    eventExpr = input$submit2, 
+    handlerExpr = {
+      user_answer2 <- input$response2
+      correct_answer2 <- current_question2()$answer2
+      
+      if (user_answer2 == correct_answer2) {
+        output$icon2 <- renderIcon("correct", width = 40)
+      } else {
+        output$icon2 <- renderIcon("incorrect", width = 40)
+      }
+      
+    }
+  )
+  
+  ### Get new challenge and reset feedback
+  observeEvent(
+    eventExpr = input$newChallenge2,
+    handlerExpr = {
+      random_choice2()
+      random_question2()
+      
+      updateSelectInput(
+        session = session,
+        inputId = "answer2",
+        selected = ""
+      )
+      
+      output$icon2 <- renderIcon()
+      output$response2 <- renderUI(NULL)
+      
+    }
+  )
+  
+  ## Challenge ----
+  ###Mixed Strategy ----
+  challengeElements4 <- reactiveValues(
+    # Creates a vector of shuffled integers which we can use for the id column
+    promptIds4 = sample(1:nrow(questionBank4), size = nrow(questionBank4), replace = FALSE),
+    # Create current index
+    currentIndex4 = 1,
+    # Create a flag if current question has been answered
+    answered4 = FALSE,
+    # Create a flag for first visit to page
+    firstTime4 = TRUE
+  )
+  
+  ### Set watcher to iterate current question
+  observeEvent(
+    eventExpr = c(input$pages, input$newChallenge4),
+    handlerExpr = {
+      if (input$pages == "example" & challengeElements4$firstTime4) {
+        challengeElements4$firstTime4 <- FALSE
+      } else if (challengeElements4$currentIndex4 == nrow(questionBank4)) {
+        
+      } else {
+        challengeElements4$currentIndex4 <- challengeElements4$currentIndex4 + 1
+      }
+    }
+  )
+  
+  ### Display challenge plot and question
+  output$questionPlot4 <- renderUI(
+    expr = {
+      questionId4 <- challengeElements4$promptIds4[challengeElements4$currentIndex4]
+      tagList(
+        HTML(questionBank4$extraOutput4[questionId4]),
+        p(questionBank4$question4[questionId4])
+      )
+    }
+  )
+  
+  random_order4 <- reactiveVal()
+  
+  random_choice4 <- function() {
+    choices <- c("1", "2", "3")
+    random_order4 <- sample(choices)
+    return(random_order4)
+  }
+  
+  random_choice4()
+  
+  observe({
+    random_order_val4 <- random_order4()
+    
+    output$choiceA <- renderUI({
+      questionId4 <- challengeElements4$promptIds4[challengeElements4$currentIndex4]
+      tagList(
+        HTML(questionBank4[[paste0("A")]][questionId4])
+      )
+    })
+    
+    output$choiceB <- renderUI({
+      questionId4 <- challengeElements4$promptIds4[challengeElements4$currentIndex4]
+      tagList(
+        HTML(questionBank4[[paste0("B")]][questionId4])
+      )
+    })
+    
+    output$choiceC <- renderUI({
+      questionId4 <- challengeElements4$promptIds4[challengeElements4$currentIndex4]
+      tagList(
+        HTML(questionBank4[[paste0("C")]][questionId4])
+      )
+    })
+  })
+  
+  current_question4 <- reactiveVal()
+  
+  random_question4 <- function() {
+    random_index4 <- sample(nrow(questionBank4), 1)
+    current_question4(questionBank4[random_index4, ])
+  }
+  
+  random_question4()
+  
+  output$question4 <- renderText({
+    current_question4()$question4
+  })
+  
+  output$extraOutput4 <- renderImage({
+    if (!is.null(current_question4()$extraOutput4) && nchar(current_question4()$extraOutput4) > 0) 
+    {
+      return(list(src = current_question4()$extraOutput4))
+    }
+  },
+  deleteFile = FALSE)
+  
+  output$A <- renderText({
+    if (!is.null(current_question4()$A) && nchar(current_question4()$A) > 0) 
+    {
+      return(list(src = current_question4()$A))
+    }
+  })
+  
+  output$B <- renderText({
+    if (!is.null(current_question4()$B) && nchar(current_question4()$B) > 0) 
+    {
+      return(list(src = current_question4()$B))
+    }
+  })
+  
+  output$C <- renderText({
+    if (!is.null(current_question4()$C) && nchar(current_question4()$C) > 0) 
+    {
+      return(list(src = current_question4()$C))
+    }
+  })
+  
+  observeEvent(
+    eventExpr = input$submit4, 
+    handlerExpr = {
+      user_answer4 <- input$response4
+      correct_answer4 <- current_question()$answer4
+      
+      if (user_answer4 == correct_answer4) {
+        output$icon4 <- renderIcon("correct", width = 40)
+      } else {
+        output$icon4 <- renderIcon("incorrect", width = 40)
+      }
+      
+    }
+  )
+  
+  ### Get new challenge and reset feedback
+  observeEvent(
+    eventExpr = input$newChallenge4,
+    handlerExpr = {
+      random_choice4()
+      random_question4()
+      
+      updateSelectInput(
+        session = session,
+        inputId = "answer4",
+        selected = ""
+      )
+      
+      output$icon4 <- renderIcon()
+      output$response4 <- renderUI(NULL)
+      
+    }
+  )
 
 }
 
