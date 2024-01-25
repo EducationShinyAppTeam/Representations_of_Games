@@ -38,7 +38,6 @@ ui <- list(
       width = 250,
       sidebarMenu(
         id = "pages",
-        menuItem("Test", tabName = "test", icon = icon("bug")),
         menuItem("Overview", tabName = "overview", icon = icon("gauge-high")),
         menuItem("Prerequisites", tabName = "prerequisites", icon = icon("book")),
         menuItem("Explore", tabName = "explore", icon = icon("wpexplorer")),
@@ -53,17 +52,6 @@ ui <- list(
     ## Body ----
     dashboardBody(
       tabItems(
-        ### Testing Page ----
-        tabItem(
-          tabName = "test",
-          p("this is a test"),
-          bsButton(
-            inputId = "test1",
-            label = "Test",
-            icon = icon("bug"),
-            size = "large"
-          )
-        ),
         ### Overview Page ----
         tabItem(
           tabName = "overview",
@@ -218,26 +206,31 @@ ui <- list(
           tabsetPanel(
             id = "exploreTabs",
             type = "tabs",
+            #### First Explore Tab ----
             tabPanel(
               title = "Normal Form",
               br(),
+              p("Neil wants more text on the page to help a user know what they
+                are supposed to do."),
+              p("Given the size of your image, I don't think the two-column
+                layout is going to be useful."),
               h3("Payoff Matrix "),
               fluidRow(
                 column(
                   width = 6,
-                  uiOutput(outputId = "testing"),
-                  p("Plot here"),
-                  # uiOutput(outputId = "questionPlot1"),
-                  # br(),
-                  # h4("Answer Choices:"),
-                  # p("A:"),
-                  # uiOutput("choiceA"),
-                  # br(),
-                  # p("B:"),
-                  # uiOutput("choiceB"),
-                  # br(),
-                  # p("C:"),
-                  # uiOutput("choiceC"),
+                  uiOutput(outputId = "questionPlot1"),
+                  br(),
+                  h4("Answer Choices:"),
+                  p("Use a selectInput call that you update instead of your
+                    current approach."),
+                  p("A:"),
+                  uiOutput("choiceA"),
+                  br(),
+                  p("B:"),
+                  uiOutput("choiceB"),
+                  br(),
+                  p("C:"),
+                  uiOutput("choiceC"),
                   br()
                 ),
                 column(
@@ -270,6 +263,62 @@ ui <- list(
                   )
                 )
               )
+            ),
+            #### Second Explore Tab ----
+            tabPanel(
+              title = "Extensive Form",
+              br(),
+              h3("Game Tree"),
+              br(),
+              p("According to the situation, input payoffs in the table below
+                      for each player to create the game tree."),
+              fluidRow(
+                column(
+                  width = 6,
+                  uiOutput(outputId = "questionPlot2"),
+                  br(),
+                  h4("Answer Choices:"),
+                  p("A:"),
+                  ## All inputs and outputs MUST BE uniquely named
+                  uiOutput("choiceA2"),
+                  br(),
+                  p("B:"),
+                  uiOutput("choiceB2"),
+                  br(),
+                  p("C:"),
+                  uiOutput("choiceC2"),
+                  br()
+                ),
+                column(
+                  width = 6,
+                  p("Test your understanding by trying out these questions."),
+                  wellPanel(
+                    selectInput(
+                      inputId = "response2",
+                      label = "Select your answer",
+                      choices = list("A", "B", "C", ""),
+                      selected = ""
+                    ),
+                    bsButton(
+                      inputId = "submit2",
+                      label = "Submit",
+                      size = "large",
+                      style = "default"
+                    ),
+                    br(),
+                    p("Feedback"),
+                    uiOutput("icon2"),
+                    uiOutput("answer2"),
+                    br(),
+                    bsButton(
+                      inputId = "newChallenge2",
+                      label = "New Challenge",
+                      size = "large",
+                      style = "default"
+                    )
+                  )
+                )
+              )
             )
           ),
           div(
@@ -282,225 +331,112 @@ ui <- list(
               style = "default"
             )
           )
+        ),
+        ### Challenge Page ----
+        tabItem(
+          tabName = "challenge",
+          fluidPage(
+            tabsetPanel(
+              #### Second tab ----
+              #### Where's the first tab?
+              tabPanel(
+                title = "Mixed Strategy",
+                br(),
+                p("The following questions will test your knowledge of two player
+                    games with a mixed strategy.."),
+                fluidRow(
+                  column(
+                    width = 6,
+                    uiOutput(outputId = "questionPlot4"),
+                    br(),
+                    h4("Answer Choices:"),
+                    p("A:"),
+                    uiOutput("choiceA3"),
+                    br(),
+                    p("B:"),
+                    uiOutput("choiceB3"),
+                    br(),
+                    p("C:"),
+                    uiOutput("choiceC3"),
+                    br()
+                  ),
+                  column(
+                    width = 6,
+                    p("Test your understanding by trying out these questions."),
+                    wellPanel(
+                      selectInput(
+                        inputId = "response4",
+                        label = "Select your answer",
+                        choices = list("A", "B", "C", ""),
+                        selected = ""
+                      ),
+                      bsButton(
+                        inputId = "submit4",
+                        label = "Submit",
+                        size = "large",
+                        style = "default"
+                      ),
+                      br(),
+                      p("Feedback"),
+                      uiOutput("icon4"),
+                      uiOutput("answer4"),
+                      br(),
+                      bsButton(
+                        inputId = "newChallenge4",
+                        label = "New Challenge",
+                        size = "large",
+                        style = "default"
+                      )
+                    )
+                  )
+                )
+              ),
+            )
+          )
+        ),
+        ### References Page ----
+        tabItem(
+          tabName = "references",
+          withMathJax(),
+          h2("References"),
+          p(class = "hangingindent",
+            "Bailey, E. (2022). shinyBS: Twitter bootstrap components for shiny.
+              (v 0.61.1). [R package]. Available from
+              https://CRAN.R-project.org/package=shinyBS"
+          ),
+          p(class = "hangingindent",
+            "Carey, R. and Hatfield, N. J. (2022). boastUtils: BOAST Utilities.
+              (v 0.1.12.3). [R package]. Available from
+              https://github.com/EducationShinyAppTeam/boastUtils"
+          ),
+          p(class = "hangingindent",
+            "Chang, W. and Borges Ribeio, B. (2021). shinydashboard: Create
+              dashboards with 'Shiny'. (v. 0.7.2). [R package]. Available from
+              https://CRAN.R-project.org/package=shinydashboard"
+          ),
+          p(class = "hangingindent",
+            "Chang, W., Cheng, J., Allaire, J., Sievert, C., Schloerke, B., Xie, Y.,
+              Allen, J., McPherson, J., Dipert, A., and Borges, B. (2021). shiny:
+              Web application framework for R, R package. (v 1.7.1). [R package].
+              Available from https://CRAN.R-project.org/package=shiny"
+          ),
+          p(class = "hangingindent",
+            "Polak, B. (2007), midterm exam solutions - Yale University. Open Yale Courses.
+              Available from https://oyc.yale.edu/sites/default/files/midterm-exam-solutions-pdf.pdf"
+          ),
+          p(class = "hangingindent",
+            "Ishii, Y. (n.d.), Introductory Lecture. Canvas.
+              Available from https://psu.instructure.com/courses/2212963/files/folder/Lectures"
+          ),
+          p(class = "hangingindent",
+            "Perrier, V., Meyer, F., and Granjon, D. (2022), shinyWidgets: Custom
+              Inputs Widgets for Shiny. (v 0.7.0). [R package]. Available from
+              https://CRAN.R-project.org/package=shinyWidgets"
+          ),
+          br(),
+          br(),
+          boastUtils::copyrightInfo()
         )
-          # fluidPage(
-          #   tabsetPanel(
-          #     #### First tab ----
-          #     tabPanel(
-          #       title = "Normal Form ",
-          #       br(),
-          #       h3("Payoff Matrix "),
-          #       fluidRow(
-          #         column(
-          #           width = 6,
-          #           uiOutput(outputId = "testing"),
-          #           p("Plot here"),
-          #           uiOutput(outputId = "questionPlot1"),
-          #           br(),
-          #           h4("Answer Choices:"),
-          #           p("A:"),
-          #           uiOutput("choiceA"),
-          #           br(),
-          #           p("B:"),
-          #           uiOutput("choiceB"),
-          #           br(),
-          #           p("C:"),
-          #           uiOutput("choiceC"),
-          #           br()
-          #         ),
-          #         column(
-          #           width = 6,
-          #           p("Test your understanding by trying out these questions."),
-          #           wellPanel(
-          #             selectInput(
-          #               inputId = "response1",
-          #               label = "Select your answer",
-          #               choices = list("A", "B", "C", ""),
-          #               selected = ""
-          #             ),
-          #             bsButton(
-          #               inputId = "submit1",
-          #               label = "Submit",
-          #               size = "large",
-          #               style = "default"
-          #             ),
-          #             br(),
-          #             p("Feedback"),
-          #             uiOutput("icon1"),
-          #             uiOutput("answer1"),
-          #             br(),
-          #             bsButton(
-          #               inputId = "newChallenge1",
-          #               label = "New Challenge",
-          #               size = "large",
-          #               style = "default"
-          #             )
-          #           )
-          #         )
-          #       )
-          #     ),
-          #     #### Second tab ----
-          #     tabPanel(
-          #       title = "Extensive Form",
-          #       br(),
-          #       h3("Game Tree"),
-          #       br(),
-          #       p("According to the situation, input payoffs in the table below
-          #         for each player to create the game tree."),
-          #       fluidRow(
-          #         column(
-          #           width = 6,
-          #           uiOutput(outputId = "questionPlot2"),
-          #           br(),
-          #           h4("Answer Choices:"),
-          #           p("A:"),
-          #           uiOutput("choiceA"),
-          #           br(),
-          #           p("B:"),
-          #           uiOutput("choiceB"),
-          #           br(),
-          #           p("C:"),
-          #           uiOutput("choiceC"),
-          #           br()
-          #         ),
-          #         column(
-          #           width = 6,
-          #           p("Test your understanding by trying out these questions."),
-          #           wellPanel(
-          #             selectInput(
-          #               inputId = "response2",
-          #               label = "Select your answer",
-          #               choices = list("A", "B", "C", ""),
-          #               selected = ""
-          #             ),
-          #             bsButton(
-          #               inputId = "submit2",
-          #               label = "Submit",
-          #               size = "large",
-          #               style = "default"
-          #             ),
-          #             br(),
-          #             p("Feedback"),
-          #             uiOutput("icon2"),
-          #             uiOutput("answer2"),
-          #             br(),
-          #             bsButton(
-          #               inputId = "newChallenge2",
-          #               label = "New Challenge",
-          #               size = "large",
-          #               style = "default"
-          #             )
-          #           )
-          #         )
-          #       )
-          #     )
-          #   )
-          # ),
-        #   #### Set up a Challenge Page ----
-        #   tabItem(
-        #     tabName = "challenge",
-        #     fluidPage(
-        #       tabsetPanel(
-        #         #####Second tab ----
-        #         tabPanel(
-        #           title = "Mixed Strategy",
-        #           br(),
-        #           p("The following questions will test your knowledge of two player
-        #             games with a mixed strategy.."),
-        #           fluidRow(
-        #             column(
-        #               width = 6,
-        #               uiOutput(outputId = "questionPlot4"),
-        #               br(),
-        #               h4("Answer Choices:"),
-        #               p("A:"),
-        #               uiOutput("choiceA"),
-        #               br(),
-        #               p("B:"),
-        #               uiOutput("choiceB"),
-        #               br(),
-        #               p("C:"),
-        #               uiOutput("choiceC"),
-        #               br()
-        #             ),
-        #             column(
-        #               width = 6,
-        #               p("Test your understanding by trying out these questions."),
-        #               wellPanel(
-        #                 selectInput(
-        #                   inputId = "response4",
-        #                   label = "Select your answer",
-        #                   choices = list("A", "B", "C", ""),
-        #                   selected = ""
-        #                 ),
-        #                 bsButton(
-        #                   inputId = "submit4",
-        #                   label = "Submit",
-        #                   size = "large",
-        #                   style = "default"
-        #                 ),
-        #                 br(),
-        #                 p("Feedback"),
-        #                 uiOutput("icon4"),
-        #                 uiOutput("answer4"),
-        #                 br(),
-        #                 bsButton(
-        #                   inputId = "newChallenge4",
-        #                   label = "New Challenge",
-        #                   size = "large",
-        #                   style = "default"
-        #                 )
-        #               )
-        #             )
-        #           )
-        #         ),
-        #       )
-        #     )
-        #   ),
-        #   #### Set up the References Page ----
-        #   tabItem(
-        #     tabName = "references",
-        #     withMathJax(),
-        #     h2("References"),
-        #     p(class = "hangingindent",
-        #       "Bailey, E. (2022). shinyBS: Twitter bootstrap components for shiny.
-        #       (v 0.61.1). [R package]. Available from
-        #       https://CRAN.R-project.org/package=shinyBS"
-        #     ),
-        #     p(class = "hangingindent",
-        #       "Carey, R. and Hatfield, N. J. (2022). boastUtils: BOAST Utilities.
-        #       (v 0.1.12.3). [R package]. Available from
-        #       https://github.com/EducationShinyAppTeam/boastUtils"
-        #     ),
-        #     p(class = "hangingindent",
-        #       "Chang, W. and Borges Ribeio, B. (2021). shinydashboard: Create
-        #       dashboards with 'Shiny'. (v. 0.7.2). [R package]. Available from
-        #       https://CRAN.R-project.org/package=shinydashboard"
-        #     ),
-        #     p(class = "hangingindent",
-        #       "Chang, W., Cheng, J., Allaire, J., Sievert, C., Schloerke, B., Xie, Y.,
-        #       Allen, J., McPherson, J., Dipert, A., and Borges, B. (2021). shiny:
-        #       Web application framework for R, R package. (v 1.7.1). [R package].
-        #       Available from https://CRAN.R-project.org/package=shiny"
-        #     ),
-        #     p(class = "hangingindent",
-        #       "Polak, B. (2007), midterm exam solutions - Yale University. Open Yale Courses.
-        #       Available from https://oyc.yale.edu/sites/default/files/midterm-exam-solutions-pdf.pdf"
-        #     ),
-        #     p(class = "hangingindent",
-        #       "Ishii, Y. (n.d.), Introductory Lecture. Canvas.
-        #       Available from https://psu.instructure.com/courses/2212963/files/folder/Lectures"
-        #     ),
-        #     p(class = "hangingindent",
-        #       "Perrier, V., Meyer, F., and Granjon, D. (2022), shinyWidgets: Custom
-        #       Inputs Widgets for Shiny. (v 0.7.0). [R package]. Available from
-        #       https://CRAN.R-project.org/package=shinyWidgets"
-        #     ),
-        #     br(),
-        #     br(),
-        #     boastUtils::copyrightInfo()
-        #   )
-        # )
       )
     )
   )
@@ -508,21 +444,6 @@ ui <- list(
 
 # Define server logic ----
 server <- function(input, output, session) {
-  ## Debug test ----
-  observeEvent(
-    eventExpr = input$test1,
-    handlerExpr = {
-      print("Debug test")
-    }
-  )
-
-    output$testing <- renderUI(
-      expr = {
-        tagList(
-          p("This is a test.")
-        )
-      }
-    )
 
   ## Set up Info button ----
   observeEvent(
@@ -590,14 +511,13 @@ server <- function(input, output, session) {
     )
 
 
-    ### Display challenge plot and question
+    ### Display challenge plot and question ----
     output$questionPlot1 <- renderUI(
       expr = {
-        # questionId1 <- challengeElements1$promptIds1[challengeElements1$currentIndex1]
+        questionId1 <- challengeElements1$promptIds1[challengeElements1$currentIndex1]
         tagList(
-          p("test")
-          # HTML(questionBank1$extraOutput1[questionId1]),
-          # p(questionBank1$question1[questionId1])
+          HTML(questionBank1$extraOutput[questionId1]),
+          p(questionBank1$question[questionId1])
         )
       }
     )
@@ -744,8 +664,8 @@ server <- function(input, output, session) {
       expr = {
         questionId2 <- challengeElements2$promptIds2[challengeElements2$currentIndex2]
         tagList(
-          HTML(questionBank2$extraOutput2[questionId2]),
-          p(questionBank2$question2[questionId2])
+          HTML(questionBank2$extraOutput[questionId2]),
+          p(questionBank2$question[questionId2])
         )
       }
     )
